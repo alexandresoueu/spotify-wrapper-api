@@ -1,3 +1,5 @@
+import fetch from "isomorphic-fetch";
+
 export const search = () => {
   fetch('https://spotify.com');
 };
