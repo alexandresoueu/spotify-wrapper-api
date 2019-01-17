@@ -40,5 +40,9 @@ describe('Spotify Wrapper', () => {
 
       expect(fetchedStud).to.have.been.calledOnce
     })
+
+    it('Should receive the correct url to fetch', () => {
+      
+    })
   })
 })
