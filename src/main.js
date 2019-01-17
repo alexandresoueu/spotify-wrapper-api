@@ -1,4 +1,4 @@
-import fetch from "isomorphic-fetch";
+const fetch = require('node-fetch');
 
 export const search = () => {
   fetch('https://spotify.com');
