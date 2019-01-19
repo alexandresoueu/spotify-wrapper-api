@@ -1,6 +1,7 @@
 export const search = (query, type) =>
 /*eslint-disable */  
-  fetch(`https://api.spotify.com/v1/search?q=${query}&type=${type}`);
+  fetch(`https://api.spotify.com/v1/search?q=${query}&type=${type}`)
+  .then(data => data.json())
 /* eslint-enable */
 export const searchAlbums = () => {};
 export const searchArtists = () => {};
