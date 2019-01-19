@@ -8,8 +8,21 @@ sinonStubPromise(sinon)
 global.fetch = require('node-fetch')
 
 import { search, searchAlbums, searchArtists, searchTracks, searchPlaylists } from '../src/main'
+import { isRegExp } from 'util';
 
 describe('Spotify Wrapper', () => {
+  let fetchedStud
+  let promise
+
+  beforeEach( () => {
+    fetchedStud = sinon.stub(global, 'fetch')
+    promise = fetchedStud.returnsPromise()
+  })
+
+  afterEach( () => {
+    fetchedStud.restore()
+  })
+
   describe('Smoke tests', () => {
     it('Should exist the SEARCH method', () => {
       expect(search).to.exist
@@ -34,17 +47,6 @@ describe('Spotify Wrapper', () => {
   })
 
   describe('Generic Search', () => {
-    let fetchedStud
-    let promise
-
-    beforeEach( () => {
-      fetchedStud = sinon.stub(global, 'fetch')
-      promise = fetchedStud.returnsPromise()
-    })
-
-    afterEach( () => {
-      fetchedStud.restore()
-    })
 
     it('Should call FETCH function', () => {
       const artists = search()
@@ -77,6 +79,84 @@ describe('Spotify Wrapper', () => {
       const artists = search('Incubus', ' artist')
 
       expect(artists.resolveValue).to.be.eql({ body: 'json'})
+    })
+  })
+
+  describe('searchAlbums', () => {
+    it('Should call fetch function', () => {
+      const albums = searchAlbums('Tupamaru')
+      expect(fetchedStud).to.be.have.calledOnce
+    })
+
+    it('Should call fetch with the correct URL', () => {
+      const albums = searchAlbums('Tupamaru')
+
+      expect(fetchedStud).to.be.have
+        .calledWith('https://api.spotify.com/v1/search?q=Tupamaru&type=album')
+      
+      const albumx = searchAlbums('Vermelho')
+
+      expect(fetchedStud).to.be.have
+          .calledWith('https://api.spotify.com/v1/search?q=Vermelho&type=album')
+    })
+  })
+  
+  describe('searchArtists', () => {
+    it('Should call fetch function', () => {
+      const artists = searchArtists('Zander')
+      expect(fetchedStud).to.have.been.calledOnce
+    })
+
+    it('Should call fetch with the correct URL', () => {
+      const artists = searchArtists('Zander', 'artist')
+
+      expect(fetchedStud).to.have.been
+        .calledWith('https://api.spotify.com/v1/search?q=Zander&type=artist')
+
+      const artistx = searchArtists('Tchan', 'artist')
+
+      expect(fetchedStud).to.have.been
+          .calledWith('https://api.spotify.com/v1/search?q=Tchan&type=artist')
+    })
+  })
+
+  describe('searchTracks', () => {
+    it('Should call fetch function', () => {
+      const tracks = searchTracks('Braza')
+
+      expect(fetchedStud).to.be.have.calledOnce
+    })
+
+    it('Should call fetch with the correct URL', () => {
+      const tracks = searchTracks('Braza')
+
+      expect(fetchedStud).to.be.have
+        .calledWith('https://api.spotify.com/v1/search?q=Braza&type=tracks')
+        
+      const trackx = searchTracks('Timbalada')
+
+      expect(fetchedStud).to.be.have
+        .calledWith('https://api.spotify.com/v1/search?q=Timbalada&type=tracks')
+    })
+  })
+
+  describe('searchPlaylists', () => {
+    it('Should call fetch function', () => {
+      const playlists = searchPlaylists('ACDC')
+
+      expect(fetchedStud).to.be.have.calledOnce
+    })
+
+    it('Should call fetch with the correct URL', () => {
+      const playlists = searchPlaylists('ACDC')
+
+      expect(fetchedStud).to.be.have
+        .calledWith('https://api.spotify.com/v1/search?q=ACDC&type=playlist')
+
+      const playlistx = searchPlaylists('Araketo')
+
+      expect(fetchedStud).to.be.have
+        .calledWith('https://api.spotify.com/v1/search?q=Araketo&type=playlist')
     })
   })
 })
