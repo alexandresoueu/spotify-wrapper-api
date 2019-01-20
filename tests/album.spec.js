@@ -36,7 +36,7 @@ describe('Album', () => {
     })
   })
 
-  describe.only('getAlbum', () => {
+  describe('getAlbum', () => {
     it('Should call fetch method', () => {
       const album = getAlbum()
       expect(stubedFetch).to.have.been.calledOnce
@@ -73,7 +73,8 @@ describe('Album', () => {
     })
 
     it('Should return the correct data from Promise', () => {
-      const albums = getAlbums({ album: 'name'})
+      promise.resolves({ album: 'name'})
+      const albums = getAlbums(['4aawyAB9vmqN3uQ7FjRGTy', '4aawyAB9vmqN3uQ7FjRGTn'])
       expect(albums.resolveValue).to.be.eql({ album: 'name'})
     })
 
