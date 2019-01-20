@@ -86,8 +86,15 @@ return /******/ (function(modules) { // webpackBootstrap
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+var TOKEN_API = 'BQBYKPle_0ARb362DrdIlTv1f2wOQA5ifFwS2DlWEmsxapFf_OauA1MRgCIcKBLST_o_NC_rg0oM7xuwT-1SQo2tMggVEWPr1NWkyIUKroe0svT0b9ad7SErjmMbCRUbVNS1-TtWRHxx3YHH80Mm9A';
 // eslint-disable-next-line import/prefer-default-export
 var API_URL = exports.API_URL = 'https://api.spotify.com/v1';
+
+var HEADERS = exports.HEADERS = {
+  headers: {
+    Authorization: '\'Bearer ' + TOKEN_API + '\''
+  }
+};
 
 /***/ }),
 /* 1 */
@@ -123,7 +130,7 @@ var _utils = __webpack_require__(1);
 var getAlbum = exports.getAlbum = function getAlbum(id) {
   return (
     /*eslint-disable */
-    fetch(_config.API_URL + '/albums/' + id).then(_utils.toJSON)
+    fetch(_config.API_URL + '/albums/' + id, _config.HEADERS).then(_utils.toJSON)
   );
 };
 /* eslint-enable */
@@ -131,7 +138,7 @@ var getAlbum = exports.getAlbum = function getAlbum(id) {
 var getAlbums = exports.getAlbums = function getAlbums(ids) {
   return (
     /*eslint-disable */
-    fetch(_config.API_URL + '/albums/?ids=' + ids).then(_utils.toJSON)
+    fetch(_config.API_URL + '/albums/?ids=' + ids, _config.HEADERS).then(_utils.toJSON)
   );
 };
 /* eslint-enable */
@@ -139,7 +146,7 @@ var getAlbums = exports.getAlbums = function getAlbums(ids) {
 var getAlbumTracks = exports.getAlbumTracks = function getAlbumTracks(id) {
   return (
     /*eslint-disable */
-    fetch(_config.API_URL + '/albums/' + id + '/tracks').then(_utils.toJSON)
+    fetch(_config.API_URL + '/albums/' + id + '/tracks', _config.HEADERS).then(_utils.toJSON)
   );
 };
 /* eslint-enable */
@@ -163,7 +170,7 @@ var _utils = __webpack_require__(1);
 var search = exports.search = function search(query, type) {
   return (
     /*eslint-disable */
-    fetch(_config.API_URL + '/search?q=' + query + '&type=' + type).then(_utils.toJSON)
+    fetch(_config.API_URL + '/search?q=' + query + '&type=' + type, _config.HEADERS).then(_utils.toJSON)
   );
 };
 /* eslint-enable */
