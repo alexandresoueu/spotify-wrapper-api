@@ -86,7 +86,7 @@ return /******/ (function(modules) { // webpackBootstrap
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var TOKEN_API = 'BQBYKPle_0ARb362DrdIlTv1f2wOQA5ifFwS2DlWEmsxapFf_OauA1MRgCIcKBLST_o_NC_rg0oM7xuwT-1SQo2tMggVEWPr1NWkyIUKroe0svT0b9ad7SErjmMbCRUbVNS1-TtWRHxx3YHH80Mm9A';
+var TOKEN_API = 'BQDbcfI63G4BMLpJXNzLyqR7f4uQI0hPSnTqckDA6FcBoK1fpkccVK4N10smNXDTZstlJuZ3huByxO0oueBQx08Z9eXSPvQyteFntS6wD_uo71wjeD0tbU0C36ijlyvW69Eu7Z1EmBoAbbH4NkQqXg';
 // eslint-disable-next-line import/prefer-default-export
 var API_URL = exports.API_URL = 'https://api.spotify.com/v1';
 
@@ -136,12 +136,12 @@ var getAlbum = exports.getAlbum = function getAlbum(id) {
 /* eslint-enable */
 
 var getAlbums = exports.getAlbums = function getAlbums(ids) {
-  return (
-    /*eslint-disable */
-    fetch(_config.API_URL + '/albums/?ids=' + ids, _config.HEADERS).then(_utils.toJSON)
-  );
+  /*eslint-disable */
+  console.log(_config.HEADERS);
+  console.log('\n' + _config.API_URL + '/albums/?ids=' + ids);
+  return fetch(_config.API_URL + '/albums/?ids=' + ids, _config.HEADERS).then(_utils.toJSON).catch(console.error);
+  /* eslint-enable */
 };
-/* eslint-enable */
 
 var getAlbumTracks = exports.getAlbumTracks = function getAlbumTracks(id) {
   return (
@@ -175,17 +175,36 @@ var search = exports.search = function search(query, type) {
 };
 /* eslint-enable */
 var searchAlbums = exports.searchAlbums = function searchAlbums(query) {
-  search(query, 'album');
+  return (
+    /*eslint-disable */
+    search(query, 'album')
+  );
 };
+/* eslint-enable */
+
 var searchArtists = exports.searchArtists = function searchArtists(query) {
-  search(query, 'artist');
+  return (
+    /*eslint-disable */
+    search(query, 'artist')
+  );
 };
+/* eslint-enable */
+
 var searchTracks = exports.searchTracks = function searchTracks(query) {
-  search(query, 'tracks');
+  return (
+    /*eslint-disable */
+    search(query, 'tracks')
+  );
 };
+/* eslint-enable */
+
 var searchPlaylists = exports.searchPlaylists = function searchPlaylists(query) {
-  search(query, 'playlist');
+  return (
+    /*eslint-disable */
+    search(query, 'playlist')
+  );
 };
+/* eslint-enable */
 
 /***/ }),
 /* 4 */
