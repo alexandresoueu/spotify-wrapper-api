@@ -38,6 +38,19 @@ describe("API SPOTIFY", () => {
             const artist = search()
 
             expect(fetchedStub).to.have.been.calledOnce
+
+            fetchedStub.restore()
+        })
+
+        it("should receive the correct url to fecth", () => {
+            const fetchedStub = sinon.stub(global, 'fetch')
+            const artists = search('incubus', 'artist')
+
+            expect(fetchedStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=incubus&type=artist')
+
+            const albums = search('incubus', 'album')
+            expect(fetchedStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=incubus&type=album')
+            fetchedStub.restore()
         })
     })
 })
