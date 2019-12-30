@@ -7,9 +7,9 @@ sinonStubPromise(sinon)
 
 global.fetch = require('node-fetch')
 
-import { search, searchArtists, searchAlbums, searchTracks, searchPlaylists } from '../src/main.js'
+import { search, searchArtists, searchAlbums, searchTracks, searchPlaylists } from '../src/search.js'
 
-describe("API SPOTIFY", () => {
+describe("Search", () => {
 
     let fetchedStub
     let promise
