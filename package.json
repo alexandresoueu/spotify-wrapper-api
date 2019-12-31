@@ -67,7 +67,9 @@
     "sinon": "^2.4.1",
     "sinon-chai": "^2.14.0",
     "sinon-stub-promise": "^4.0.0",
-    "webpack": "^2.4.1"
+    "webpack": "^2.6.1",
+    "webpack-dev-server": "^2.4.5"
   },
-  "dependencies": {}
+  "dependencies": {
+  }
 }
