@@ -71,7 +71,7 @@ describe("Album", () => {
             expect(fetchedStub).to.have.been.calledWith('https://api.spotify.com/v1/albums/?ids=4aawyAB9vmqN3uQ7FjRFTy,4aawyAB9vmqN3uQ7FjRFTq')
         })
 
-        it.skip("should return the correct data from promise", () => {
+        it.only("should return the correct data from promise", () => {
             promise.resolves({ album: 'name' })
 
             const albums = getAlbums(['4aawyAB9vmqN3uQ7FjRFTy', '4aawyAB9vmqN3uQ7FjRFTq'])
