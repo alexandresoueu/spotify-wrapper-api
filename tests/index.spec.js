@@ -1,92 +1,90 @@
-import chai, { expect } from 'chai'
-import sinon from 'sinon'
-import sinonChai from 'sinon-chai'
-import sinonStubPromise from 'sinon-stub-promise'
-sinonStubPromise(sinon)
-chai.use(sinonChai)
+/* eslint-disable no-unused-expressions */
+import chai, { expect } from 'chai';
+import sinon from 'sinon';
+import sinonChai from 'sinon-chai';
+import SpotifyWrapper from '../src/index';
 
-global.fetch = require('node-fetch')
+chai.use(sinonChai);
 
-import SpotifyWrapper from '../src/index.js'
+global.fetch = require('node-fetch');
 
 describe('SpotifyWrapper Library', () => {
-    it("should create an instance of SpotifyWrapper", () => {
-        let spotify = new SpotifyWrapper({})
-        expect(spotify).to.be.an.instanceof(SpotifyWrapper)
-    })
+  it('shoul create an instance of SpotifyWrapper', () => {
+    const spotify = new SpotifyWrapper({});
+    expect(spotify).to.be.an.instanceOf(SpotifyWrapper);
+  });
 
-    it("should receive apiURL as an option", () => {
-        let spotify = new SpotifyWrapper({
-            apiURL: 'nemo'
-        }) 
+  it('should receive apiURL as an option', () => {
+    const spotify = new SpotifyWrapper({
+      apiURL: 'blabla',
+    });
 
-        expect(spotify.apiURL).to.be.equal('nemo')
-    })
+    expect(spotify.apiURL).to.be.equal('blabla');
+  });
 
-    it("should use the default apiURL if not provided", () => {
-        let spotify = new SpotifyWrapper({})
-        expect(spotify.apiURL).to.be.equal('https://api.spotify.com/v1')
-    })
+  it('should use the default apiURL if not provided', () => {
+    const spotify = new SpotifyWrapper({});
+    expect(spotify.apiURL).to.be.equal('https://api.spotify.com/v1');
+  });
 
-    it("should receive token as an option", () => {
-        let spotify = new SpotifyWrapper({
-            token: 'foo'
-        })
+  it('should receive token as an option', () => {
+    const spotify = new SpotifyWrapper({
+      token: 'foo',
+    });
 
-        expect(spotify.token).to.be.equal('foo')
-    })
+    expect(spotify.token).to.be.equal('foo');
+  });
 
-    describe("request method", () => {
+  describe('request method', () => {
+    let stubedFetch;
 
-        let stubedFetch
-        let promise
+    beforeEach(() => {
+      stubedFetch = sinon.stub(global, 'fetch');
+      stubedFetch.resolves({ json: () => ({ album: 'name' }) });
+    });
+    afterEach(() => {
+      stubedFetch.restore();
+    });
 
-        beforeEach(() => {
-            stubedFetch = sinon.stub(global, 'fetch')
-            promise = stubedFetch.returnsPromise()
-        })
+    it('should have request method', () => {
+      const spotify = new SpotifyWrapper({});
+      expect(spotify.request).to.exist;
+    });
+    it('should call fetch when request', () => {
+      const spotify = new SpotifyWrapper({
+        token: 'foo',
+      });
 
-        afterEach(() => {
-            stubedFetch.restore()
-        })
+      spotify.request('url');
 
-        it("should have request method", () => {
-            let spotify = new SpotifyWrapper({})
+      expect(stubedFetch).to.have.been.calledOnce;
+    });
+    it('should call fetch with right url passed', () => {
+      const spotify = new SpotifyWrapper({
+        token: 'foo',
+      });
 
-            expect(spotify.request).to.exist
-        })
+      spotify.request('url');
 
-        it("should call fetch when request", () => {
-            let spotify = new SpotifyWrapper({
-                token: 'foo'
-            })
+      expect(stubedFetch).to.have.been.calledWith('url');
+    });
+    it('should call fetch with right headers passed', () => {
+      const spotify = new SpotifyWrapper({
+        token: 'foo',
+      });
 
-            spotify.request('url')
-            expect(stubedFetch).to.have.been.calledOnce
-        })
+      const headers = {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer foo',
+        },
+        mode: 'cors',
+      };
 
-        it("should call fetch with right url passed", () => {
-            let spotify = new SpotifyWrapper({
-                token: 'foo'
-            })
-
-            spotify.request('url')
-            expect(stubedFetch).to.have.been.calledWith('url')
-        })
-
-        it("should call fetch with right headers passed", () => {
-            let spotify = new SpotifyWrapper({
-                token: 'foo'
-            })
-
-            const headers = {
-                headers: {
-                    Authorization: `'Bearer foo'`
-                }
-            }
-
-            spotify.request('url')
-            expect(stubedFetch).to.have.been.calledWith('url', headers)
-        })
-    })
-})
+      spotify.request('url');
+      expect(stubedFetch).to.have.been.calledOnceWith('url', headers);
+    });
+  });
+});

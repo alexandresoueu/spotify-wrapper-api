@@ -1,114 +1,124 @@
-import chai, { expect } from 'chai'
-import sinon from 'sinon'
-import sinonChai from 'sinon-chai'
-import sinonStubPromise from 'sinon-stub-promise'
-chai.use(sinonChai)
-sinonStubPromise(sinon)
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-expressions */
+import chai, { expect } from 'chai';
+import sinon from 'sinon';
+import sinonChai from 'sinon-chai';
 
-global.fetch = require('node-fetch')
+import SpotifyWrapper from '../src/index';
 
-import SpotifyWrapper from '../src/index.js'
+chai.use(sinonChai);
 
-describe("Search", () => {
-    let spotify
-    let fetchedStub
-    let promise
+global.fetch = require('node-fetch');
 
-    beforeEach(() => {
-        spotify = new SpotifyWrapper({
-            token: 'foo'
-        })
-        fetchedStub = sinon.stub(global, 'fetch')
-        promise = fetchedStub.returnsPromise()
-    })
+describe('Search', () => {
+  let fetchedStub;
+  const spotify = new SpotifyWrapper({
+    token: 'foo',
+  });
 
-    afterEach(() => {
-        fetchedStub.restore()
-    })
+  // Hooks
+  beforeEach(() => {
+    fetchedStub = sinon.stub(global, 'fetch');
+    fetchedStub.resolves({ json: () => ({ album: 'name' }) });
+  });
 
-    describe("Smoke tests", () => {
-        it("should exist artists method", () => {
-            expect(spotify.search.artists).to.exist
-        })
+  afterEach(() => {
+    fetchedStub.restore();
+  });
+  // Hooks end
 
-        it("should exist albums method", () => {
-            expect(spotify.search.albums).to.exist
-        })
+  describe('Smoke Tests', () => {
+    it('Should exist the spotify.search.albums method', () => {
+      expect(spotify.search.albums).to.exist;
+    });
+    it('Should exist the spotify.search.artists method', () => {
+      expect(spotify.search.artists).to.exist;
+    });
+    it('Should exist the spotify.search.tracks method', () => {
+      expect(spotify.search.tracks).to.exist;
+    });
+    it('Should exist the spotify.search.playlists method', () => {
+      expect(spotify.search.playlists).to.exist;
+    });
+  });
 
-        it("should exist tracks method", () => {
-            expect(spotify.search.tracks).to.exist
-        })
+  describe('spotify.search.artists', () => {
+    it('Should call fetch function', () => {
+      spotify.search.artists('Incubus');
 
-        it("should exist playlists method", () => {
-            expect(spotify.search.playlists).to.exist
-        })
-    })
+      expect(fetchedStub).to.have.been.calledOnce;
+    });
 
-    describe("Search for artist", () => {
-        it("should call fetch function", () => {
-            const artists = spotify.search.artists('Incubus')
+    it('Should call fetch with the correct URL', () => {
+      spotify.search.artists('Incubus');
 
-            expect(fetchedStub).to.have.been.calledOnce
-        })
+      expect(fetchedStub).to.have.been
+        .calledWith('https://api.spotify.com/v1/search?q=Incubus&type=artist');
 
-        it("should receive the correct url to fetch", () => {
-            const artists = spotify.search.artists('Incubus')
+      spotify.search.artists('Muse');
 
-            expect(fetchedStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=Incubus&type=artist')
+      expect(fetchedStub).to.have.been
+        .calledWith('https://api.spotify.com/v1/search?q=Muse&type=artist');
+    });
+  });
 
-            const artistsTwo = spotify.search.artists('Soundgarden')
-            expect(fetchedStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=Soundgarden&type=artist')
-        })
-    })
+  describe('spotify.search.albums', () => {
+    it('Should call fetch function', () => {
+      spotify.search.albums('Incubus');
 
-    describe("Search for album", () => {
-        it("should call fetch function", () => {
-            const albums = spotify.search.albums('bush')
+      expect(fetchedStub).to.have.been.calledOnce;
+    });
 
-            expect(fetchedStub).to.have.been.calledOnce
-        })
+    it('Should call fetch with the correct URL', () => {
+      spotify.search.albums('Incubus');
 
-        it("should receive the correct url to fetch", () => {
-            const albums = spotify.search.albums('bush')
+      expect(fetchedStub).to.have.been
+        .calledWith('https://api.spotify.com/v1/search?q=Incubus&type=album');
 
-            expect(fetchedStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=bush&type=album')
+      spotify.search.albums('Muse');
 
-            const albumsTwo = spotify.search.albums('soundgarden')
-            expect(fetchedStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=soundgarden&type=album')
-        })
-    })
+      expect(fetchedStub).to.have.been
+        .calledWith('https://api.spotify.com/v1/search?q=Muse&type=album');
+    });
+  });
 
-    describe("Search for track", () => {
-        it("should call fetch function", () => {
-            const tracks = spotify.search.tracks('limpbizkit')
+  describe('spotify.search.tracks', () => {
+    it('Should call fetch function', () => {
+      spotify.search.tracks('Incubus');
 
-            expect(fetchedStub).to.have.been.calledOnce
-        })
+      expect(fetchedStub).to.have.been.calledOnce;
+    });
 
-        it("should receive the correct url to fetch", () => {
-            const tracks = spotify.search.tracks('limpbizkit')
+    it('Should call fetch with the correct URL', () => {
+      spotify.search.tracks('Incubus');
 
-            expect(fetchedStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=limpbizkit&type=track')
+      expect(fetchedStub).to.have.been
+        .calledWith('https://api.spotify.com/v1/search?q=Incubus&type=track');
 
-            const tracksTwo = spotify.search.tracks('braza')
-            expect(fetchedStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=braza&type=track')
-        })
-    })
+      spotify.search.tracks('Muse');
 
-    describe("Search for playlist", () => {
-        it("should call fetch function", () => {
-            const playlists = spotify.search.playlists('braza')
+      expect(fetchedStub).to.have.been
+        .calledWith('https://api.spotify.com/v1/search?q=Muse&type=track');
+    });
+  });
 
-            expect(fetchedStub).to.have.been.calledOnce
-        })
+  describe('spotify.search.playlists', () => {
+    it('Should call fetch function', () => {
+      spotify.search.playlists('Incubus');
 
-        it("should receive the correct url to fetch", () => {
-            const playlists = spotify.search.playlists('braza')
+      expect(fetchedStub).to.have.been.calledOnce;
+    });
 
-            expect(fetchedStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=braza&type=playlist')
+    it('Should call fetch with the correct URL', () => {
+      spotify.search.playlists('Incubus');
 
-            const playlistsTwo = spotify.search.playlists('izenzee')
-            expect(fetchedStub).to.have.been.calledWith('https://api.spotify.com/v1/search?q=izenzee&type=playlist')
-        })
-    })
-})
+      expect(fetchedStub).to.have.been
+        .calledWith('https://api.spotify.com/v1/search?q=Incubus&type=playlist');
+
+      spotify.search.playlists('Muse');
+
+      expect(fetchedStub).to.have.been
+        .calledWith('https://api.spotify.com/v1/search?q=Muse&type=playlist');
+    });
+  });
+});
